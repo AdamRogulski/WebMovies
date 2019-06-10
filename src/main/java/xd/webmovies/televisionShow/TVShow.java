@@ -1,46 +1,42 @@
-package xd.webmovies.movie;
-
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package xd.webmovies.televisionShow;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Movie {
+public class TVShow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
     @NotEmpty
-    @Size(max = 50)
+    @Column(unique = true)
+    @Size(max = 75)
     private String title;
 
+    @PositiveOrZero
     private int year;
 
     @Lob
     private String description;
 
-    @Size(max = 100)
+    @PositiveOrZero
+    private int episodes;
+
     private String image;
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
+    public TVShow() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,13 +64,19 @@ public class Movie {
         this.description = description;
     }
 
-    public Movie() {
+    public int getEpisodes() {
+        return episodes;
     }
 
-    public Movie(@NotEmpty String title, int year, String description, String image) {
-        this.title = title;
-        this.year = year;
-        this.description = description;
+    public void setEpisodes(int episodes) {
+        this.episodes = episodes;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
         this.image = image;
     }
 }
