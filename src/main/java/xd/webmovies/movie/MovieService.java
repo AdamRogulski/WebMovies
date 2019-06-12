@@ -1,9 +1,7 @@
 package xd.webmovies.movie;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -20,20 +18,33 @@ public class MovieService {
     }
 
     void addMovie(Movie movie){
-        if(movie.getDescription().isEmpty())
-            movie.setDescription("Movie hasn't description yet");
-        movieRepository.save(movie);
-    }
 
-    boolean isMovieHasUniqueTitle(String title){
-       return movieRepository.existsByTitle(title);
-    }
+            if (movie.getDescription()==null)
+                movie.setDescription("Movie hasn't description yet");
+
+            if(movie.getYear() < 0){
+                movie.setYear(0);
+                System.out.println("Year must be postitve number, setting year to default number 0");
+            }
+            if(movie.getYear()<1800 || movie.getYear()>2100 ){
+                movie.setYear(0);
+                System.out.println("Year must have value between 1800 and 2100, setting year to default number 0");
+            }
+
+            movieRepository.save(movie);
+
+        }
 
     void deleteMovie(Long id){
-        movieRepository.delete(movieRepository.getOne(id));
+        movieRepository.deleteById(id);
+    }
+
+    boolean isTitleNotUnique(String title){
+        return movieRepository.existsByTitle(title);
     }
 
     Movie getOne(Long id){
-        return movieRepository.getOne(id);
+        return movieRepository.findById(id).orElse(null);
     }
+
 }

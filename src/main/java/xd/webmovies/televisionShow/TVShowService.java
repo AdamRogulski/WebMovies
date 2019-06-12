@@ -20,4 +20,16 @@ public class TVShowService {
     void addShow(TVShow tvShow){
         tvShowRepository.save(tvShow);
     }
+
+    TVShow getOneTVShow(Long id){
+       return tvShowRepository.findById(id).orElse(null);
+    }
+
+    void deleteTVShow(Long id){
+        tvShowRepository.deleteById(id);
+    }
+
+    boolean isTVShowTitleNotUnique(String title){
+        return tvShowRepository.existsByTitle(title);
+    }
 }
