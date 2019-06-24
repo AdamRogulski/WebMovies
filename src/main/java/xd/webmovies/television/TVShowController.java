@@ -1,4 +1,4 @@
-package xd.webmovies.televisionShow;
+package xd.webmovies.television;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

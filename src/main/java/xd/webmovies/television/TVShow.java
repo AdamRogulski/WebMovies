@@ -1,8 +1,7 @@
-package xd.webmovies.televisionShow;
+package xd.webmovies.television;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
