@@ -1,9 +1,12 @@
-package xd.webmovies.television;
+package xd.webmovies.media.television;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 public class TVShow {
@@ -28,7 +31,21 @@ public class TVShow {
 
     private String image;
 
+    @OneToMany(mappedBy = "tvShow")
+    @JsonBackReference
+    private Set<MyTVShow> myShows;
+
+
+
     public TVShow() {
+    }
+
+    public Set<MyTVShow> getMyShows() {
+        return myShows;
+    }
+
+    public void setMyShows(Set<MyTVShow> myShows) {
+        this.myShows = myShows;
     }
 
     public Long getId() {

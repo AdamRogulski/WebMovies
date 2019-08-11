@@ -1,9 +1,8 @@
-package xd.webmovies.security;
+package xd.webmovies.security.login;
 
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-import java.util.Set;
 
 public class LoginResponse {
     private String token;

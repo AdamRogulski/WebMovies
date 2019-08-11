@@ -1,8 +1,9 @@
-package xd.webmovies.movie;
+package xd.webmovies.media.movie;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xd.webmovies.media.MediaDTO;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class MovieController {
     }
 
     @PostMapping("/filmy/dodaj")
-    public ResponseEntity<String> addMovie(@RequestBody Movie movie){
+    public ResponseEntity<String> addMovie(@RequestBody MediaDTO movie){
 
         if(!movieService.isTitleNotUnique(movie.getTitle())){
 
@@ -53,15 +54,9 @@ public class MovieController {
     }
 
     @PutMapping("filmy/{id}")
-    public ResponseEntity<String> updateMovie(@PathVariable Long id, @RequestBody Movie updatedMovie){
+    public ResponseEntity<String> updateMovie(@PathVariable Long id, @RequestBody MediaDTO updatedMovie){
 
-        Movie oldMovie = movieService.getOne(id);
-
-        oldMovie.setTitle(updatedMovie.getTitle());
-        oldMovie.setYear(updatedMovie.getYear());
-        oldMovie.setDescription(updatedMovie.getDescription());
-        oldMovie.setImage(updatedMovie.getImage());
-        movieService.addMovie(oldMovie);
+        movieService.updateMovie(id,updatedMovie);
 
         return new ResponseEntity<>("Movie updated",HttpStatus.OK);
     }

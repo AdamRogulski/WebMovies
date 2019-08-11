@@ -1,6 +1,9 @@
 package xd.webmovies.user;
 
 
+import com.fasterxml.jackson.annotation.*;
+import xd.webmovies.media.movie.MyMovie;
+import xd.webmovies.media.television.MyTVShow;
 import xd.webmovies.user.authority.Authority;
 
 import javax.persistence.*;
@@ -9,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -22,7 +26,7 @@ public class User {
     private String password;
 
     @AssertTrue
-    boolean isActive;
+    private boolean isActive;
 
     @ManyToMany
     @JoinTable(
@@ -32,7 +36,31 @@ public class User {
     )
     private Set<Authority> user_Authority;
 
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private Set<MyTVShow> myShows;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private Set<MyMovie> myMovies;
+
     public User() {
+    }
+
+    public Set<MyMovie> getMyMovies() {
+        return myMovies;
+    }
+
+    public void setMyMovies(Set<MyMovie> myMovies) {
+        this.myMovies = myMovies;
+    }
+
+    public Set<MyTVShow> getMyShows() {
+        return myShows;
+    }
+
+    public void setMyShows(Set<MyTVShow> myShows) {
+        this.myShows = myShows;
     }
 
     public Long getId() {
@@ -47,10 +75,12 @@ public class User {
         return username;
     }
 
+    @JsonProperty
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

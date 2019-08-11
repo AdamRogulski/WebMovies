@@ -1,4 +1,4 @@
-package xd.webmovies.movie;
+package xd.webmovies.media.movie;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

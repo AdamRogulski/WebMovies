@@ -1,6 +1,7 @@
-package xd.webmovies.movie;
+package xd.webmovies.media.movie;
 
 import org.springframework.stereotype.Service;
+import xd.webmovies.media.MediaDTO;
 
 import java.util.List;
 
@@ -17,7 +18,14 @@ public class MovieService {
        return movieRepository.findAll();
     }
 
-    void addMovie(Movie movie){
+    void addMovie(MediaDTO movieDTO){
+
+        Movie movie = new Movie();
+
+        movie.setImage(movieDTO.getImage());
+        movie.setDescription(movieDTO.getDescription());
+        movie.setYear(movieDTO.getYear());
+        movie.setTitle(movieDTO.getTitle());
 
             if (movie.getDescription()==null)
                 movie.setDescription("Movie hasn't description yet");
@@ -47,4 +55,15 @@ public class MovieService {
         return movieRepository.findById(id).orElse(null);
     }
 
+    void updateMovie(Long id,MediaDTO movieDTO){
+
+        Movie oldMovie = movieRepository.getOne(id);
+
+        oldMovie.setTitle(movieDTO.getTitle());
+        oldMovie.setYear(movieDTO.getYear());
+        oldMovie.setDescription(movieDTO.getDescription());
+        oldMovie.setImage(movieDTO.getImage());
+
+        movieRepository.save(oldMovie);
+    }
 }

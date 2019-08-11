@@ -1,11 +1,13 @@
-package xd.webmovies.movie;
+package xd.webmovies.media.movie;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -20,7 +22,6 @@ public class Movie {
     @Size(max = 50)
     private String title;
 
-
     private int year;
 
     @Lob
@@ -28,6 +29,18 @@ public class Movie {
 
     @Size(max = 100)
     private String image;
+
+    @OneToMany(mappedBy = "movie")
+    @JsonBackReference
+    private Set<MyMovie> myMovie;
+
+    public Set<MyMovie> getMyMovie() {
+        return myMovie;
+    }
+
+    public void setMyMovie(Set<MyMovie> myMovie) {
+        this.myMovie = myMovie;
+    }
 
     public String getImage() {
         return image;

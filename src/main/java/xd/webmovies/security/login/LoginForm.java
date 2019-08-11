@@ -1,4 +1,4 @@
-package xd.webmovies.security;
+package xd.webmovies.security.login;
 
 public class LoginForm {
 

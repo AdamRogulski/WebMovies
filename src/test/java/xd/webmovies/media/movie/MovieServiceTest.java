@@ -1,4 +1,4 @@
-package xd.webmovies.movie;
+package xd.webmovies.media.movie;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,12 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,32 +62,6 @@ public class MovieServiceTest {
         assertEquals(2,result.size());
     }
 
-    @Test
-    public void addMovieWithoutDescription(){
-        Movie movie1 = new Movie();
-        movie1.setTitle("Venom");
-
-        when(movieRepository.save(movie1)).thenReturn(movie1);
-
-        movieService.addMovie(movie1);
-
-        assertEquals("Venom",movie1.getTitle());
-        assertEquals("Movie hasn't description yet",movie1.getDescription());
-    }
-
-    @Test
-    public void addMovieWithNegativeNumberOfYear(){
-        Movie movie1 = new Movie();
-        movie1.setTitle("Venom");
-        movie1.setYear(-123);
-
-        when(movieRepository.save(movie1)).thenReturn(movie1);
-
-        movieService.addMovie(movie1);
-
-        assertEquals("Venom", movie1.getTitle());
-        assertEquals(0,movie1.getYear());
-    }
 
     @Test
     public void deleteMovie(){

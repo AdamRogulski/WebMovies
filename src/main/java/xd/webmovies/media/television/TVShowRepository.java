@@ -1,4 +1,4 @@
-package xd.webmovies.television;
+package xd.webmovies.media.television;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
