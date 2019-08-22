@@ -2,11 +2,13 @@ package xd.webmovies.media.movie;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -33,6 +35,17 @@ public class Movie {
     @OneToMany(mappedBy = "movie")
     @JsonBackReference
     private Set<MyMovie> myMovie;
+
+    private LocalDateTime movieAddedTime;
+
+    @JsonFormat(pattern = "HH:mm dd.MM.yyyy")
+    public LocalDateTime getMovieAddedTime() {
+        return movieAddedTime;
+    }
+
+    public void setMovieAddedTime(LocalDateTime movieAddedTime) {
+        this.movieAddedTime = movieAddedTime;
+    }
 
     public Set<MyMovie> getMyMovie() {
         return myMovie;

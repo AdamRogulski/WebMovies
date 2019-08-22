@@ -7,22 +7,43 @@ import xd.webmovies.user.User;
 import xd.webmovies.user.UserService;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MyTVShowService {
 
     @Autowired
-    MyTVShowRepository myTVShowRepository;
-
+   private MyTVShowRepository myTVShowRepository;
     @Autowired
-    UserService userService;
-
+   private UserService userService;
     @Autowired
-    TVShowService tvShowService;
+   private TVShowService tvShowService;
+
 
     List<MyTVShow> getAll(){
         return myTVShowRepository.findAll();
+    }
+
+    List<MyDTO> getLatestShows(){
+
+        List<MyDTO> myShowsListDto = new ArrayList<>();
+
+        List<MyTVShow>  myTVShows = myTVShowRepository.findTop8ByOrderByCreationTimeDesc();
+
+        for (MyTVShow t : myTVShows){
+            MyDTO myTVShowDTO = new MyDTO();
+            myTVShowDTO.setTitle(t.getTvShow().getTitle());
+            myTVShowDTO.setRating(t.getRate());
+            myTVShowDTO.setAuthor(t.getUser().getUsername());
+            myTVShowDTO.setComment(t.getComment());
+            myTVShowDTO.setStatus(t.getStatus());
+            myTVShowDTO.setCreationTime(t.getCreationTime());
+            myShowsListDto.add(myTVShowDTO);
+        }
+
+        return myShowsListDto;
+
     }
 
     MyTVShow getOne(Long id){
@@ -48,4 +69,13 @@ public class MyTVShowService {
     void deleteMyShow(Long id){
         myTVShowRepository.deleteById(id);
     }
+
+    void deleteMyShowsByTVShowId(Long id){
+        List<MyTVShow> myTVShowList = myTVShowRepository.findAllByTvShow_Id(id);
+
+        for (MyTVShow t : myTVShowList){
+            myTVShowRepository.delete(t);
+        }
+    }
 }
+

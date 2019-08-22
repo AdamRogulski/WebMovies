@@ -1,9 +1,11 @@
 package xd.webmovies.media.movie;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import xd.webmovies.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class MyMovie {
@@ -22,9 +24,28 @@ public class MyMovie {
     @JsonManagedReference
     private Movie movie;
 
+
+    @Lob
     private String comment;
+
     private int rate;
     private String status;
+
+    private LocalDateTime creationTime = LocalDateTime.now();
+
+    public MyMovie() {
+    }
+
+    public MyMovie(String comment, int rate, String status) {
+        this.comment = comment;
+        this.rate = rate;
+        this.status = status;
+    }
+
+    @JsonFormat(pattern = "HH:mm dd.MM.yyyy")
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
 
     public Long getId() {
         return id;

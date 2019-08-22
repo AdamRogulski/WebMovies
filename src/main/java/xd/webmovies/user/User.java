@@ -16,10 +16,11 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(min = 6)
+    @Column(unique = true)
     private String username;
 
     @Size(min = 6)
@@ -28,7 +29,7 @@ public class User {
     @AssertTrue
     private boolean isActive;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "User_Authority",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -45,6 +46,12 @@ public class User {
     private Set<MyMovie> myMovies;
 
     public User() {
+    }
+
+    public User(@Size(min = 6) String username, @Size(min = 6) String password, @AssertTrue boolean isActive) {
+        this.username = username;
+        this.password = password;
+        this.isActive = isActive;
     }
 
     public Set<MyMovie> getMyMovies() {

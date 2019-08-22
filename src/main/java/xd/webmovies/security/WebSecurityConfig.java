@@ -19,11 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
     private JwtAuthenticationEntryPoint entryPoint;
+
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationEntryPoint entryPoint) {
+        this.userDetailsService = userDetailsService;
+        this.entryPoint = entryPoint;
+    }
 
     @Bean
     @Override
@@ -49,8 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/zaloguj","/filmy","/seriale").permitAll()
-                .antMatchers(HttpMethod.GET,"/seriale/{id}","/filmy/{id}").permitAll()
+                .antMatchers("/login","/movies","/tvshows","/tvshows/{id}/comments","/movies/{id}/comments","/user/add","/movies/search").permitAll()
+                .antMatchers(HttpMethod.GET,"/tvshows/{id}","/movies/{id}","/mytvshows/latest","/mymovies/latest","/tvshows/latest","/movies/latest","/tvshows/search").permitAll()
+                .antMatchers(HttpMethod.POST,"/movies/add","/tvshows/add").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/movies/{id}","/tvshows/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/movies/{id}","/tvshows/{id}").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)

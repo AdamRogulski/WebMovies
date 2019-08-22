@@ -8,6 +8,16 @@ public class MediaDTO {
     private String title;
     private int year;
 
+    public MediaDTO() {
+    }
+
+    public MediaDTO(String image, String description, String title, int year) {
+        this.image = image;
+        this.description = description;
+        this.title = title;
+        this.year = year;
+    }
+
     public Long getId() {
         return id;
     }

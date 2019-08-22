@@ -1,69 +1,78 @@
 package xd.webmovies.media.television;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xd.webmovies.media.MediaDTO;
 import xd.webmovies.media.MyDTO;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class TVShowController {
 
+    @Autowired
     private TVShowService tvShowService;
 
-    public TVShowController(TVShowService tvShowService) {
-        this.tvShowService = tvShowService;
-    }
-
-
-    @GetMapping("/seriale")
+    @GetMapping("/tvshows")
     public List<TVShow> getAll(){
-       return tvShowService.getAllShows();
+        return  tvShowService.getAllShows();
     }
 
-    @GetMapping("/seriale/{id}")
+    @GetMapping("/tvshows/latest")
+    public List<TVShow> getLatest10(){
+        return tvShowService.get10LatestAddedShows();
+    }
+
+    @GetMapping("/tvshows/{id}")
     public TVShow getOneShow(@PathVariable Long id){
         return tvShowService.getOneTVShow(id);
     }
 
-    @GetMapping("/seriale/{id}/comments")
+    @GetMapping("/tvshows/{id}/comments")
     public Set<MyDTO> getComments(@PathVariable Long id){
-        TVShow tvShow = tvShowService.getOneTVShow(id);
-        Set<MyDTO> myDTOS = new HashSet<>();
 
-        for(MyTVShow x :tvShow.getMyShows()){
-            MyDTO myDTO1 = new MyDTO();
-            myDTO1.setComment(x.getComment());
-            myDTO1.setRating(x.getRate());
-            myDTO1.setStatus(x.getStatus());
-            myDTOS.add(myDTO1);
-        }
-        return myDTOS;
+        return tvShowService.getComments(id);
     }
 
-    @PostMapping("/seriale/dodaj")
+    @GetMapping("/tvshows/search")
+    public List<MediaDTO> searchTVShows(@RequestParam String title){
+        return tvShowService.searchTVShowsByTitle(title);
+    }
+
+    @PostMapping("/tvshows/add")
     public ResponseEntity<String> addShow(@RequestBody TVShowDTO tvShow){
 
+        if(!tvShowService.isTitleNotUnique(tvShow.getTitle())){
         tvShowService.addShow(tvShow);
-        return new ResponseEntity<>("TV Show added", HttpStatus.OK);
+            return new ResponseEntity<>("TV Show added", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("TV Show with this title is already in database", HttpStatus.CONFLICT);
+        }
     }
 
-    @PutMapping("/seriale/{id}")
+    @PutMapping("/tvshows/{id}")
     public ResponseEntity<String> updateShow(@PathVariable Long id, @RequestBody TVShowDTO tvShowDTO){
 
+        if (tvShowService.getOneTVShow(id)!=null){
         tvShowService.updateShow(id,tvShowDTO);
-        return new ResponseEntity<>("TV Show updated",HttpStatus.OK);
+        return new ResponseEntity<>("TV show updated",HttpStatus.OK);}
+        else
+            return new ResponseEntity<>("Can't find TV Show with this id to update",HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/seriale/{id}")
+    @DeleteMapping("/tvshows/{id}")
     public ResponseEntity<String> deleteShow(@PathVariable Long id){
 
+        if(tvShowService.getOneTVShow(id)!=null){
         tvShowService.deleteTVShow(id);
-        return new ResponseEntity<>("Tv Show with id: " +id +" deleted", HttpStatus.OK);
+        return new ResponseEntity<>("Tv show: " +id +" deleted", HttpStatus.OK);}
+        else
+            return new ResponseEntity<>("Can't find TV Show with that id", HttpStatus.NOT_FOUND);
     }
 
 }

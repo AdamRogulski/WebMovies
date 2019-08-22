@@ -10,23 +10,30 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class MyMovieController {
 
     @Autowired
-    MyMovieService myMovieService;
+    private MyMovieService myMovieService;
 
-    @GetMapping("/getmymovies")
+    @GetMapping("/mymovies")
     public List<MyMovie> getAllMyMovies(){
         return myMovieService.getAll();
     }
 
-    @PostMapping("/addmymovie/{id}")
-    public void addMyMovie(@PathVariable Long id, @RequestBody MyDTO myDTO, Principal principal){
-        myMovieService.saveMyMovie(id,myDTO,principal);
+    @GetMapping("/mymovies/latest")
+    public List<MyDTO> getLatestMyMovies(){
+        return myMovieService.getLatest8Posts();
     }
 
-    @DeleteMapping("/deletemymovie/{id}")
+    @PostMapping("/mymovies/{id}")
+    public ResponseEntity<String> addMyMovie(@PathVariable Long id, @RequestBody MyDTO myDTO, Principal principal){
+
+        myMovieService.saveMyMovie(id,myDTO,principal);
+        return new ResponseEntity<>("Post added",HttpStatus.OK);
+    }
+
+    @DeleteMapping("/mymovies/{id}")
     public ResponseEntity<String> deleteMyMovie(@PathVariable Long id){
         if (myMovieService.getOne(id)!=null){
         myMovieService.deleteMyMovie(id);

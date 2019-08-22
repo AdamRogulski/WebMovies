@@ -1,15 +1,17 @@
 package xd.webmovies.media.television;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-public class TVShow {
+public class TVShow{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,9 +37,24 @@ public class TVShow {
     @JsonBackReference
     private Set<MyTVShow> myShows;
 
-
+    private LocalDateTime showAddedTime = LocalDateTime.now();
 
     public TVShow() {
+    }
+
+    public TVShow(@NotEmpty @Size(max = 75) String title, @PositiveOrZero int year, String description, @PositiveOrZero int episodes, String image) {
+        this.title = title;
+        this.year = year;
+        this.description = description;
+        this.episodes = episodes;
+        this.image = image;
+    }
+
+
+
+    @JsonFormat(pattern = "HH:mm dd.MM.yyyy")
+    public LocalDateTime getShowAddedTime() {
+        return showAddedTime;
     }
 
     public Set<MyTVShow> getMyShows() {

@@ -18,16 +18,20 @@ import xd.webmovies.security.JwtTokenUtil;
 @CrossOrigin(origins = "*")
 public class LoginController {
 
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
+    private AuthenticationManager authenticationManager;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    public LoginController(JwtTokenUtil jwtTokenUtil, AuthenticationManager authenticationManager) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.authenticationManager = authenticationManager;
+    }
 
-    @PostMapping("/zaloguj")
-    public LoginResponse hello5(@RequestBody LoginForm login) {
+    @PostMapping("/login")
+    public LoginResponse hello(@RequestBody LoginForm login) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.getUsername(),login.getPassword()));
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtTokenUtil.generateToken(authentication);

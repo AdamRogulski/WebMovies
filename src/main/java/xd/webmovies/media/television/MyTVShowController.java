@@ -10,33 +10,35 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class MyTVShowController {
 
     @Autowired
-    MyTVShowService myTVShowService;
+    private MyTVShowService myTVShowService;
 
-
-    @GetMapping("/getmyshows")
+    @GetMapping("/mytvshows")
     public List<MyTVShow> getAllShows(){
         return myTVShowService.getAll();
     }
 
-    @PostMapping("/addmyshow/{id}")
-    public ResponseEntity<String> addShow(@PathVariable Long id, @RequestBody MyDTO myDTO, Principal principal){
-
-
-        myTVShowService.saveMyShow(id, myDTO,principal);
-
-        return new ResponseEntity<>("Show added", HttpStatus.OK);
+    @GetMapping("/mytvshows/latest")
+    public List<MyDTO> getLatestShows(){
+        return myTVShowService.getLatestShows();
     }
 
-    @DeleteMapping("/deletemyshow/{id}")
+    @PostMapping("/mytvshows/{id}")
+    public ResponseEntity<String> addShow(@PathVariable Long id, @RequestBody MyDTO myDTO, Principal principal){
+
+        myTVShowService.saveMyShow(id, myDTO,principal);
+        return new ResponseEntity<>("Added", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/mytvshows/{id}")
     public ResponseEntity<String> deleteShow(@PathVariable Long id){
         if(myTVShowService.getOne(id) != null){
         myTVShowService.deleteMyShow(id);
-        return new ResponseEntity<>("Usunięto",HttpStatus.OK);}
+        return new ResponseEntity<>("Deleted",HttpStatus.OK);}
         else
-            return new ResponseEntity<>("Nie znaleziono", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Not found", HttpStatus.CONFLICT);
     }
 }

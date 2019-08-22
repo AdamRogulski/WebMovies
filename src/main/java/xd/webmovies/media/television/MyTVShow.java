@@ -1,14 +1,16 @@
 package xd.webmovies.media.television;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import xd.webmovies.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class MyTVShow {
+public class MyTVShow{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,9 +28,28 @@ public class MyTVShow {
 
     private int rate;
 
+    @Lob
     private String comment;
 
     private String status;
+
+    private LocalDateTime creationTime = LocalDateTime.now();
+
+    public MyTVShow() {
+    }
+
+    public MyTVShow(int rate, String comment, String status) {
+        this.rate = rate;
+        this.comment = comment;
+        this.status = status;
+    }
+
+
+
+    @JsonFormat(pattern = "HH:mm dd.MM.yyyy")
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
 
     public Long getId() {
         return id;

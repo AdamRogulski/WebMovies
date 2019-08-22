@@ -15,6 +15,10 @@ public class Authority {
     public Authority() {
     }
 
+    public Authority(AuthorityType type) {
+        this.type = type;
+    }
+
     public int getId() {
         return id;
     }

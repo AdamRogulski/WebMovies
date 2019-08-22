@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import xd.webmovies.media.movie.MyMovie;
 import xd.webmovies.media.television.MyTVShow;
+import xd.webmovies.security.login.LoginForm;
 
 import java.security.Principal;
 import java.util.List;
@@ -12,11 +13,14 @@ import java.util.Set;
 
 @Controller
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class UserController {
 
-    @Autowired
     private UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     public List<User> showUsers(){
@@ -28,18 +32,18 @@ public class UserController {
         return userService.getOneUser(id);
     }
 
-    @GetMapping("/user/seriale/activity")
+    @GetMapping("/user/tvshows/activity")
     public Set<MyTVShow> getUserShows(Principal principal){
         return userService.getUserShows(principal.getName());
     }
 
-    @GetMapping("/user/filmy/activity")
+    @GetMapping("/user/movies/activity")
     public Set<MyMovie> getUserMovies(Principal principal){
         return userService.getUserMovies(principal.getName());
     }
 
     @PostMapping("/user/add")
-    public void  addUser(@RequestBody User user){
-        userService.addUser(user);
+    public void  addUser(@RequestBody LoginForm loginForm){
+        userService.addUser(loginForm);
     }
 }
